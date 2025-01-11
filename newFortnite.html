@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Drop Randomizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Fortnite Drop Randomizer</h1>
+    </header>
+
+    <main class="main-container">
+        <!-- Season Selector -->
+        <section class="selector-section">
+            <h2>Pick a Season</h2>
+            <select id="season" class="season-selector">
+                <option value="C1S1">Chapter 1: Season 1</option>
+                <option value="C1S7">Chapter 1: Season 7</option>
+                <option value="C2S2">Chapter 2: Season 2</option>
+            
+            
+            </select>
+        </section>
+
+        <!-- Wheel Container -->
+        <section class="wheel-section">
+            <canvas id="wheel" width="300" height="300"></canvas>
+            <button id="spinButton" class="spin-button">Spin the Wheel!</button>
+        </section>
+
+        <!-- Results Section -->
+        <section class="result-section">
+            <h2>Drop Location:</h2>
+            <p id="location">Where will you drop?</p>
+            <img id="mapPreview" src="" alt="Map Preview" style="display: none;">
+        </section>
+    </main>
+
+    <footer>
+        <p>Find your new favorite drop spot!</p>
+    </footer>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Press Start 2P', sans-serif;
+            text-align: center;
+            background-color: #0e0b1f;
+            color: #ffffff;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(90deg, #ff4d4d, #ff9800);
+            padding: 20px 0;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 2px 2px #000;
+        }
+
+        /* Main Container */
+        .main-container {
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #1a1530;
+            border-radius: 15px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Section Styling */
+        .selector-section h2, .result-section h2 {
+            font-size: 1.5rem;
+            color: #ffeb3b;
+            margin-bottom: 10px;
+        }
+
+        .season-selector {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            background-color: #673ab7;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .season-selector:hover {
+            background-color: #512da8;
+        }
+
+        .wheel-section {
+            margin: 20px 0;
+            
+        }
+
+        canvas {
+            border: 5px solid #ffeb3b;
+            border-radius: 50%;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #673ab7, #ff5722);
+        }
+
+        /* Button */
+        .spin-button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-family: 'Serif', Arial;
+            background-color: #ffeb3b;
+            color: #0e0b1f;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .spin-button:hover {
+            background-color: #ffc107;
+        }
+
+        /* Result Section */
+        .result-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .result-section p {
+            font-size: 1.2rem;
+            color: #ffeb3b;
+        }
+
+        .result-section img {
+            margin-top: 15px;
+            width: 80%;
+            max-width: 400px;
+            border: 5px solid #ffeb3b;
+            border-radius: 10px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 20px;
+            padding: 10px 0;
+            background: linear-gradient(90deg, #ff9800, #ff4d4d);
+            color: #fff;
+            font-size: 0.9rem;
+        }
+    </style>
+
+<script>
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const spinButton = document.getElementById('spinButton');
+    const seasonSelector = document.getElementById('season');
+    const locationDisplay = document.getElementById('location');
+
+    let locations = ['Pleasant Park', 'Salty Springs', 'Greasy Grove', 'Anarchy Acres', 'Wailing Woods', 'Tomato Town', 'Lonely Lodge', 'Loot Lake', 'Flush Factory', 'Fatal Fields', 'Moisty Mire', 'Retail Row'];
+    const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#33FF57', '#3357FF'];
+
+    const seasonLocations = {
+        C1S1: ['Pleasant Park', 'Salty Springs', 'Greasy Grove', 'Anarchy Acres', 'Wailing Woods', 'Tomato Town', 'Lonely Lodge', 'Loot Lake', 'Flush Factory', 'Fatal Fields', 'Moisty Mire', 'Retail Row'],
+        C1S7: ['Frosty Flights', 'Happy Hamlet', 'Polar Peak', 'Shifty Shafts', 'Pleasant Park', 'Snobby Shores', 'Haunted Hills', 'Lazy Links', 'Tomato Temple', 'Dusty Divot', 'Retail Row', 'Lonely Lodge', 'Paradise Palms'],
+        C2S2: ['The Agency', 'Frenzy Farm', 'Lazy Lake', 'Slurpy Swamp', 'Misty Meadows', 'Retail Row', 'Weeping Woods', 'Salty Springs', 'Holly Hedges', 'Sweaty Sands', 'Steamy Stacks', 'Craggy Cliffs', 'Dirty Docks', 'The Yacht', 'The Grotto', 'The Rig', 'The Shark']
+    };
+
+    function updateLocations() {
+        const selectedSeason = seasonSelector.value;
+        locations = seasonLocations[selectedSeason] || [];
+        drawWheel();
+    }
+
+    let startAngle = 0;
+    const arcSize = (2 * Math.PI) / locations.length;
+    let isSpinning = false;
+
+    function drawWheel() {
+    // Update the arc size based on the current number of locations    
+    const arcSize = (2 * Math.PI) / locations.length; 
+    // Clear the canvas before redrawing
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    
+    for (let i = 0; i < locations.length; i++) {
+        const angle = startAngle + i * arcSize;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, canvas.height / 2);
+        ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, angle, angle + arcSize);
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        ctx.closePath();
+
+        // Draw text
+        ctx.save();
+        ctx.translate(
+            canvas.width / 2 + Math.cos(angle + arcSize / 2) * (canvas.width / 3),
+            canvas.height / 2 + Math.sin(angle + arcSize / 2) * (canvas.height / 3)
+        );
+        ctx.rotate(angle + arcSize / 2);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 14px Arial';
+        ctx.fillText(locations[i], -ctx.measureText(locations[i]).width / 2, 0);
+        ctx.restore();
+    }
+}
+
+
+    function spinWheel() {
+        if (isSpinning) return;
+        isSpinning = true;
+         // Spins for a random amount
+        let spinAngle = Math.random() * 2000 + 2000;
+        const spinTime = 5000;
+        const start = performance.now();
+
+        function animate(now) {
+            const elapsed = now - start;
+            if (elapsed < spinTime) {
+                const easeOut = 1 - Math.pow(1 - elapsed / spinTime, 3);
+                startAngle = spinAngle * easeOut;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawWheel();
+                requestAnimationFrame(animate);
+            } else {
+                const selectedIndex = Math.floor(
+                    (locations.length - (startAngle / (2 * Math.PI)) % locations.length) % locations.length
+                );
+                locationDisplay.textContent = locations[selectedIndex];
+                isSpinning = false;
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    seasonSelector.addEventListener('change', updateLocations);
+    spinButton.addEventListener('click', spinWheel);
+    drawWheel();
+</script>
+
+</body>
+</html>
+
+

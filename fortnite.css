@@ -1,0 +1,113 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Bungee', sans-serif;
+    text-align: center;
+    background-color: #121212;
+    color: #fff;
+}
+
+/* Header */
+header {
+    background-color: #4CAF50;
+    padding: 20px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 2px 2px #000;
+}
+
+/* Main Container */
+.main-container {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 15px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Section Styling */
+.selector-section h2, .result-section h2 {
+    font-size: 1.8rem;
+    color: #FFD700;
+    margin-bottom: 10px;
+}
+
+.season-selector {
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+}
+
+.season-selector:hover {
+    background-color: #45a049;
+}
+
+.wheel-section {
+    margin: 20px 0;
+}
+
+canvas {
+    border: 5px solid #FFD700;
+    border-radius: 50%;
+    margin: 20px 0;
+    background: linear-gradient(45deg, #4CAF50, #FF8C00);
+}
+
+/* Button */
+.spin-button {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    background-color: #FFD700;
+    color: #121212;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.spin-button:hover {
+    background-color: #FFC107;
+}
+
+/* Result Section */
+.result-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.result-section p {
+    font-size: 1.5rem;
+    color: #4CAF50;
+}
+
+.result-section img {
+    margin-top: 15px;
+    width: 80%;
+    max-width: 400px;
+    border: 5px solid #FFD700;
+    border-radius: 10px;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    padding: 10px 0;
+    background-color: #4CAF50;
+    color: #fff;
+    font-size: 1rem;
+}
